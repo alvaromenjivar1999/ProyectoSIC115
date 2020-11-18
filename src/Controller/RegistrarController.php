@@ -32,4 +32,5 @@ class RegistrarController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+  
 }
