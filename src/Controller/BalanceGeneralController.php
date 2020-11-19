@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class BalanceGeneralController extends AbstractController
 {
     /**
-     * @Route("/balance/general", name="balance_general")
+     * @Route("/balance_general", name="balance_general")
      */
     public function index(): Response
     {
