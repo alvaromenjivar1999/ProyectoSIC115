@@ -17,6 +17,7 @@ class RegistrarController extends AbstractController
      */
     public function index(Request $request): Response
     {
+        $id;
         $partida = new Partida();
         $form = $this->createForm(TipoPartidaType::class, $partida);
         $form -> handleRequest($request);
@@ -24,7 +25,9 @@ class RegistrarController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->persist($partida);
             $em->flush();
-            return $this->redirectToRoute('registrar');
+            $id = $partida->getId();
+            $url = "cuentas/" . $id; //redirige a cuentas/ para agregar sus cuentas parciales
+            return $this->redirect($url);
         }
 
         return $this->render('registrar/index.html.twig', [

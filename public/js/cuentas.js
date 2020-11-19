@@ -3,6 +3,13 @@ var btnGuardar = document.getElementById("btnGuardar");
 var tabla = document.getElementById('tablacuentas');
 var num =0;
 var cuentas = [];
+function getId(){
+    console.log("paso")
+    var id = document.getElementById('partidaTitle').getAttribute('data-partidaid');
+    console.log(id);
+    return id;
+}
+
 btnAgregar.addEventListener('click',function(){
     agregarFila();
     btnGuardar.style.visibility="visible";
@@ -77,15 +84,17 @@ function guardar(){
     
     console.log(cuentas);
     enviarDatos();
+    
 }
 
 function enviarDatos(){
     var ruta = Routing.generate('registrarCuentas');
+
     console.log(ruta);
     $.ajax({
         type: "POST",
         url: ruta,
-        data: {'cuentas':cuentas},
+        data: {'cuentas':cuentas,'partidaId':getId()},
         async: true,
         dataType: "json",
         success: function(data){

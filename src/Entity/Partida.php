@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use App\Repository\PartidaRepository;
 use Doctrine\ORM\Mapping as ORM;
-
+use Doctrine\Common\Collections\ArrayCollection;
 /**
  * @ORM\Entity(repositoryClass=PartidaRepository::class)
  */
@@ -34,6 +34,7 @@ class Partida
 
     public function __construct(){
         $this->fecha= new \DateTime(); 
+        $this->cuentasParciales = new ArrayCollection();
     }
 
     public function getId(): ?int
