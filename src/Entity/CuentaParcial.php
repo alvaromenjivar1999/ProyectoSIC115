@@ -20,6 +20,11 @@ class CuentaParcial
     /**
      * @ORM\Column(type="string", length=255)
      */
+    private $numero;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
     private $nombre;
 
     /**
@@ -36,9 +41,37 @@ class CuentaParcial
      */
     private $partidas;
 
+    /**
+     * @return mixed
+     */
+    public function getPartidas()
+    {
+        return $this->partidas;
+    }
+
+    /**
+     * @param mixed $partidas
+     */
+    public function setPartidas($partidas): void
+    {
+        $this->partidas = $partidas;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getNumero(): ?string
+    {
+        return $this->numero;
+    }
+
+    public function setNumero(string $numero): self
+    {
+        $this->numero = $numero;
+
+        return $this;
     }
 
     public function getNombre(): ?string
@@ -76,4 +109,6 @@ class CuentaParcial
 
         return $this;
     }
+
+
 }
