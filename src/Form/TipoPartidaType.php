@@ -15,7 +15,7 @@ class TipoPartidaType extends AbstractType
         $builder
             ->add('fecha')
             ->add('concepto')
-            ->add('Guardar', SubmitType::class)
+            ->add('Aceptar', SubmitType::class)
         ;
     }
 
