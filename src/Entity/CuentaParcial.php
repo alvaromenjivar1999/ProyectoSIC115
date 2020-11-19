@@ -40,7 +40,9 @@ class CuentaParcial
      * @ORM\ManyToOne(targetEntity="App\Entity\Partida", inversedBy="cuentasParciales")
      */
     private $partidas;
+    
 
+<<<<<<< HEAD
     /**
      * @return mixed
      */
@@ -57,6 +59,11 @@ class CuentaParcial
         $this->partidas = $partidas;
     }
 
+=======
+    public function setPartida(Partida $partida){
+        $this->partidas = $partida;
+    }
+>>>>>>> refs/remotes/origin/master
     public function getId(): ?int
     {
         return $this->id;
