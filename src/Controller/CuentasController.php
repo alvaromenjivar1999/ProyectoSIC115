@@ -34,15 +34,12 @@ class CuentasController extends AbstractController
         if($request->isXmlHttpRequest()){
             //$conn = $this->getEntityManager()->getConnection();
             $conn = $this->getDoctrine()->getManager();
-            $sql = 'INSERT INTO cuenta_parcial (id,partidas_id,numero,nombre,debe,haber) VALUES ';
-           
-            $em = $this->getDoctrine()->getManager();
+            $sql = 'INSERT INTO cuenta_parcial (partidas_id,numero,nombre,debe,haber) VALUES ';
             $cuentas= $request->request->get('cuentas');
             $partidaId =$request->request->get('partidaId');
-            $lastid =$em->getConnection()->prepare('SELECT MAX(id) FROM cuenta_parcial')->execute();
-            $lastid= $lastid + 1;
-            $logger->info("Que ondas:" . $lastid);
-            for ($i=0; $i < count($cuentas) ; $i++) { 
+           
+           
+           for ($i=0; $i < count($cuentas) ; $i++) { 
                 $cuentaA = $cuentas[$i];
                 $logger->info($cuentaA["nombre"]);
                 $nombre = strval( $cuentaA["nombre"]);
@@ -50,12 +47,12 @@ class CuentasController extends AbstractController
                 $haber = strval( $cuentaA["haber"]);
                 $numeroDeCuenta = strval( $cuentaA["numeroDeCuenta"]);
                 
-                $sql = $sql . "($lastid, $partidaId ,  '$numeroDeCuenta' , '$nombre' , $debe , $haber)";
+                $sql = $sql . "( $partidaId ,  '$numeroDeCuenta' , '$nombre' , $debe , $haber)";
                 if($i != count($cuentas)-1){
                     
                     $sql = $sql . ",";
                 }
-                $lastid= $lastid + 1;
+                
             }
             $logger->info($sql);
            $stmt = $conn->getConnection()->prepare($sql);
@@ -66,6 +63,26 @@ class CuentasController extends AbstractController
         else{
             throw new Exception("Error Processing Request", 1);
             
+        }
+    }
+    public function ultimoIdDeCuenta(){
+        $em = $this->getEntityManager();
+
+        $query = $em->createQuery(
+        '
+        SELECT MAX(id) FROM cuenta_parcial
+        '
+
+        ); 
+
+        try {
+
+        var_dump( $query->getResult() ); die;
+        return (object) $query->getResult();
+
+        } catch ( \Doctrine\ORM\NoResultException $e ) {
+
+
         }
     }
 }
