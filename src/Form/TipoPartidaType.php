@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Partida;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -14,6 +15,7 @@ class TipoPartidaType extends AbstractType
         $builder
             ->add('fecha')
             ->add('concepto')
+            ->add('Guardar', SubmitType::class)
         ;
     }
 

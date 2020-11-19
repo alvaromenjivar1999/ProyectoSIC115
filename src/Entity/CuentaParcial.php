@@ -25,7 +25,11 @@ class CuentaParcial
     /**
      * @ORM\Column(type="float")
      */
-    private $monto;
+    private $debe;
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $haber;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Partida", inversedBy="cuentasParciales")
@@ -49,14 +53,26 @@ class CuentaParcial
         return $this;
     }
 
-    public function getMonto(): ?float
+    public function getDebe(): ?float
     {
-        return $this->monto;
+        return $this->debe;
     }
 
-    public function setMonto(float $monto): self
+    public function setDebe(float $debe): self
     {
-        $this->monto = $monto;
+        $this->debe = $debe;
+
+        return $this;
+    }
+
+    public function getHaber(): ?float
+    {
+        return $this->haber;
+    }
+
+    public function setHaber(float $haber): self
+    {
+        $this->haber = $haber;
 
         return $this;
     }
