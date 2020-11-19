@@ -1,10 +1,14 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Hello CuentasController!{% endblock %}
+{% block stylesheets %}
+<link rel="stylesheet" href="/css/cuentas.css">
+{% endblock %}
 
 {% block body %}
 <div class="text-center my-5 ">
   <a id="btnAgregar" type="button" class="btn btn-primary">Agregar Cuenta</a>
+  <a id="btnGuardar" type="button" style='visibility:hidden;' class="btn btn-success" disabled>Guardar</a>
 </div>
 <div class="container mt-5">
 <h4>Estas son las cuentas agregadas en la partida</h3>
@@ -12,12 +16,12 @@
 <table id='tablacuentas' class="table">
   <thead>
     <tr>
-      <th scope="col">#</th>
-      <th scope="col">NumeroDeCuenta</th>
-      <th scope="col">Nombre</th>
-      <th scope="col">Debe</th>
-      <th scope="col">Haber</th>
-      <th colspan='3' class="text-center" scope="col">Action</th>
+      <th class="text-center" scope="col">#</th>
+      <th class="text-center" scope="col">NumeroDeCuenta</th>
+      <th class="text-center" scope="col">Nombre</th>
+      <th class="text-center" scope="col">Debe</th>
+      <th class="text-center" scope="col">Haber</th>
+      <th class="text-center" colspan='3' class="text-center" scope="col">Action</th>
     </tr>
   </thead>
   <tbody>
@@ -27,5 +31,9 @@
 </table>
 </div>
 
+{% endblock %}
+{% block javascripts %}
+<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+<script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
 <script src="/js/cuentas.js"></script>
 {% endblock %}
