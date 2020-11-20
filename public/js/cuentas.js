@@ -1,9 +1,14 @@
 var btnAgregar = document.getElementById("btnAgregar");
+btnAgregar.disabled = true;
 var btnGuardar = document.getElementById("btnGuardar");
 var tabla = document.getElementById('tablacuentas');
 var num =0;
 var cuentas = [];
 var flag = true;
+var catalogo_de_cuentas =[];
+var inputsInnerHTML = "";
+
+
 function getId(){
     console.log("paso")
     var id = document.getElementById('partidaTitle').getAttribute('data-partidaid');
@@ -12,6 +17,7 @@ function getId(){
 }
 
 btnAgregar.addEventListener('click',function(){
+    if(btnAgregar.disabled) return 0;
     agregarFila();
     btnGuardar.style.visibility="visible";
 });
@@ -27,18 +33,15 @@ function agregarFila(){
     var nr= row.insertCell(0);
     nr.innerHTML= num.toString();
     nr.class="nr-ch";
-    var numeroDeCuenta = row.insertCell(1);
-    var nombre = row.insertCell(2);
-    let debe = row.insertCell(3);
-    let haber = row.insertCell(4);
-    row.insertCell(5).innerHTML='<button onclick="aceptarCuenta(event)" type="button" class="btn btn-success mr-1">Aceptar</button>';
-    row.insertCell(6).innerHTML='<button onclick="editar(event)" type="button" class="btn btn-danger">Editar</button>';
-    row.insertCell(7).innerHTML='<button onclick="eliminar(event)" type="button" class="btn btn-danger mr-1">Eliminar</button>';
-
-    numeroDeCuenta.innerHTML ='<input class="form-control" type="text">';
-    nombre.innerHTML='<input  class="form-control" type="text">';
-    debe.innerHTML='<input  class="form-control"  type="text" value="0">';
+    var numeroYNombreDeCuenta = row.insertCell(1);
     
+    let debe = row.insertCell(2);
+    let haber = row.insertCell(3);
+    row.insertCell(4).innerHTML='<button onclick="aceptarCuenta(event)" type="button" class="btn btn-success mr-1">Aceptar</button>';
+    row.insertCell(5).innerHTML='<button onclick="editar(event)" type="button" class="btn btn-danger">Editar</button>';
+    row.insertCell(6).innerHTML='<button onclick="eliminar(event)" type="button" class="btn btn-danger mr-1">Eliminar</button>';
+    numeroYNombreDeCuenta.innerHTML = inputsInnerHTML;
+    debe.innerHTML='<input  class="form-control"  type="text" value="0">';    
     haber.innerHTML='<input  class="form-control"  type="text" value="0">';
     
 }
@@ -53,6 +56,7 @@ function aceptarCuenta(event){
 function editar(event){
     if(!flag) {alert("No puedes editar esta cuenta si no has aceptado todas las cuentas"); return 0;}
     flag = false;
+    cuentas =[];
     let arr = currentInputs(event);
     arr.forEach(i => {
         i.disabled = false;
@@ -63,11 +67,10 @@ function editar(event){
 }
 function currentInputs(event){    
     var fila = event.currentTarget.parentElement.parentElement;
-    var numeroDeCuenta = fila.children[1].firstElementChild;
-    var nombre = fila.children[2].firstElementChild;
-    var debe = fila.children[3].firstElementChild;
-    var haber = fila.children[4].firstElementChild;
-    return [numeroDeCuenta , nombre , debe , haber];
+    var numeroYNombreDeCuenta = fila.children[1].firstElementChild;
+    var debe = fila.children[2].firstElementChild;
+    var haber = fila.children[3].firstElementChild;
+    return [numeroYNombreDeCuenta , debe , haber];
 }
 function eliminar(event){
     flag =true;
@@ -83,13 +86,11 @@ function guardar(){
         console.log(i);
         let tds = trs[i].querySelectorAll("td"); 
             
-        var numeroDeCuenta = parseInt(tds[1].firstElementChild.value).toString();
-        var nombre = tds[2].firstElementChild.value;
-        if(numeroDeCuenta==""){alert ("El campo 'numero de cuenta' es obligatorio, cuenta numero" + (i+1).toString()); return 0; }
-        
-        if(nombre==""){alert ("El campo 'nombre' de cuenta es obligatorio, cuenta numero" + (i+1).toString()); return 0; }
-        var debe = tds[3].firstElementChild.value;
-        var haber = tds[4].firstElementChild.value;
+        var inputSelectedIndex = tds[1].firstElementChild.selectedIndex;
+        var cuentaSeleccionada = catalogo_de_cuentas["catalogo"][inputSelectedIndex];
+        var debe = tds[2].firstElementChild.value;
+       
+        var haber = tds[3].firstElementChild.value;
         
         if(debe=="") debe = "0";//validando
 
@@ -97,15 +98,15 @@ function guardar(){
         if(haber=="") haber = "0";
         
         cuentas.push({
-            numeroDeCuenta:numeroDeCuenta,
-            nombre:nombre,
+            numeroDeCuenta:cuentaSeleccionada["numerocuenta"],
+            nombre:cuentaSeleccionada["nombrecuenta"],
             debe:debe,
             haber:haber        
         });
        }
     
     console.log(cuentas);
-    //enviarDatos();
+    enviarDatos();
    
 }
 
@@ -133,4 +134,34 @@ for( var e= 0; e<nr.length; e++){
     nr[e].firstElementChild.innerHTML=(e+1).toString();
 }
 num =nr.length;
+}
+
+function traer_catalogo(){
+    var ruta ="/catalogoDeCuentas"
+    $.ajax({
+        type: "GET",
+        url: ruta,
+        data: {},
+        async: true,
+        dataType: "json",
+        success: function(data){
+            console.log(data);
+            catalogo_de_cuentas = data;
+            getInputInnerHTML();
+            btnAgregar.disabled = false;
+            
+        }
+    });
+}
+
+function getInputInnerHTML(){
+    //catalogo_de_cuentas
+    //inputsInnerHTML
+    var inputString ='<select class="browser-default custom-select" name="cars" id="cars">';
+    catalogo_de_cuentas["catalogo"].forEach(cuenta => {
+    inputString +='<option value="'+cuenta["numerocuenta"]+'">'+cuenta["numerocuenta"]+ "----"+cuenta["nombrecuenta"] +'</option>';
+        
+    });
+    inputString += '</select>';
+    inputsInnerHTML = inputString;
 }

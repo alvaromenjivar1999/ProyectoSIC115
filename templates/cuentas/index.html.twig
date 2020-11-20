@@ -17,8 +17,7 @@
   <thead>
     <tr>
       <th class="text-center" scope="col">#</th>
-      <th class="text-center" scope="col">NumeroDeCuenta</th>
-      <th class="text-center" scope="col">Nombre</th>
+      <th class="text-center" scope="col">CUENTA</th>      
       <th class="text-center" scope="col">Debe</th>
       <th class="text-center" scope="col">Haber</th>
       <th class="text-center" colspan='3' class="text-center" scope="col">Action</th>
@@ -36,5 +35,5 @@
 {% block javascripts %}
 <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
 <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
-<script src="/js/cuentas.js"></script>
+<script onload="traer_catalogo()" src="/js/cuentas.js"></script>
 {% endblock %}

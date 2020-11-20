@@ -20,11 +20,11 @@ class CuentasController extends AbstractController
      * @Route("/cuentas/{id}", name="cuentas")
      */
     public function index($id): Response
-    {
-        
+    {        
         return $this->render('cuentas/index.html.twig', [
             'controller_name' => 'CuentasController',
             'partidaId' => $id,
+           
         ]);
     }
     /**
@@ -63,25 +63,20 @@ class CuentasController extends AbstractController
         else{
             throw new Exception("Error Processing Request", 1);
         }
-    }
-    public function ultimoIdDeCuenta(){
-        $em = $this->getEntityManager();
-
-        $query = $em->createQuery(
-        '
-        SELECT MAX(id) FROM cuenta_parcial
-        '
-
-        ); 
-
-        try {
-
-        var_dump( $query->getResult() ); die;
-        return (object) $query->getResult();
-
-        } catch ( \Doctrine\ORM\NoResultException $e ) {
-
-
+    } 
+    /**
+     * @Route("/catalogoDeCuentas", options = { "expose" = true }, name="catalogoDeCuentas")
+     */     
+    public function catalogoAll(Request $request){
+        if($request->isXmlHttpRequest()){
+        $catalogo;
+        $conn = $this->getDoctrine()->getManager();
+        $sql = 'SELECT * FROM catalogo_de_cuentas';
+        $stmt = $conn->getConnection()->prepare($sql);
+        $stmt->execute();
+        $catalogo = $stmt->fetchAllAssociative();
+        return new JsonResponse(['catalogo' =>$catalogo]);
         }
+        return "Nada que ver aca";
     }
 }
