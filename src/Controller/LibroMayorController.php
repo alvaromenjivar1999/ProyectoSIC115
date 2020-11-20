@@ -16,10 +16,6 @@ class LibroMayorController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
         $db = $em->getConnection();
-        /*$query = "SELECT partida.fecha, partida.concepto, cuenta_parcial.debe, cuenta_parcial.haber
-FROM cuenta_parcial
-INNER JOIN partida ON cuenta_parcial.partidas_id=partida.id WHERE cuenta_parcial.numero='12';
-";*/
         $query = "SELECT DISTINCT nombre from cuenta_parcial";
         $stmt = $db->prepare($query);
         $params = array();
@@ -28,7 +24,7 @@ INNER JOIN partida ON cuenta_parcial.partidas_id=partida.id WHERE cuenta_parcial
         $numerosDeCuenta = $stmt->fetchAll();
 
         $cuentas = array();
-
+        $saldos = array();
         $nombresDeCuenta = array();
 
         if (is_array($numerosDeCuenta) || is_object($numerosDeCuenta)){
@@ -38,14 +34,21 @@ INNER JOIN partida ON cuenta_parcial.partidas_id=partida.id WHERE cuenta_parcial
                     $query2 = "SELECT partida.fecha, partida.concepto, cuenta_parcial.debe, cuenta_parcial.haber
         FROM cuenta_parcial
         INNER JOIN partida ON cuenta_parcial.partidas_id=partida.id WHERE cuenta_parcial.nombre='$numString';";
+                    $query3 = "SELECT SUM(debe - haber) as Resta FROM cuenta_parcial WHERE cuenta_parcial.nombre='$numString';
+";
                     $stmt2 = $db->prepare($query2);
                     $params2 = array();
                     $stmt2->execute($params2);
+                    $stmt3 = $db->prepare($query3);
+                    $params3 = array();
+                    $stmt3->execute($params3);
 
+                    $saldo = $stmt3->fetchAll();
                     $cuenta = $stmt2->fetchAll();
 
                     array_push($cuentas, $cuenta);
                     array_push($nombresDeCuenta, $numString);
+                    array_push($saldos, $saldo);
                 }
             }
         }
@@ -56,7 +59,8 @@ INNER JOIN partida ON cuenta_parcial.partidas_id=partida.id WHERE cuenta_parcial
         return $this->render('libro_mayor/index.html.twig', [
             'cuentas' => $cuentas,
             'numeros' => $numerosDeCuenta,
-            'nombres' => $nombresDeCuenta
+            'nombres' => $nombresDeCuenta,
+            'saldos' => $saldos
         ]);
     }
     /*

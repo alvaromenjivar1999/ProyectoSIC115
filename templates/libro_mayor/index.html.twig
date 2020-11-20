@@ -21,10 +21,18 @@
                 <tr>
                     <td>{{ valor.fecha }}</td>
                     <td>{{ valor.concepto }}</td>
-                    <td>{{ valor.debe }}</td>
-                    <td>{{ valor.haber }}</td>
+                    <td>${{ valor.debe }}</td>
+                    <td>${{ valor.haber }}</td>
                 </tr>
                 {% endfor %}
+
+                <tr>
+                    <td></td>
+                    <td>Saldo Final</td>
+                    <td></td>
+                    <td>${{ saldos[counter][0].resta }}</td>
+                </tr>
+
             </table>
         {% endfor %}
     </div>
