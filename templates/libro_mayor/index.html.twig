@@ -3,7 +3,29 @@
 {% block title %}Hello LibroMayorController!{% endblock %}
 
 {% block body %}
-    <table>
-        {{ dump(cuentas) }}
-    </table>
+    <div class="container" style="padding-top: 3%; padding-bottom: 3%;">
+        <h1>Libro Mayor</h1>
+        <p>Bienvenido a libro mayor</p>
+
+        {% for cuenta in cuentas %}
+            {% set counter = ( counter | default(-1) ) + 1 %}
+            <h4> {{  nombres[counter] }}</h4>
+            <table class="table" style="width:100%">
+                <tr>
+                    <th>Fecha</th>
+                    <th>Concepto</th>
+                    <th>Debe</th>
+                    <th>Haber</th>
+                </tr>
+                {% for valor in cuenta %}
+                <tr>
+                    <td>{{ valor.fecha }}</td>
+                    <td>{{ valor.concepto }}</td>
+                    <td>{{ valor.debe }}</td>
+                    <td>{{ valor.haber }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% endfor %}
+    </div>
 {% endblock %}

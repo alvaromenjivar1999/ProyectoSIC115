@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\CuentaParcial;
+use ContainerUKH2oZj\getDoctrine_QueryDqlCommandService;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -18,8 +19,6 @@ class CuentaParcialRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, CuentaParcial::class);
     }
-
-    public function
 
     // /**
     //  * @return CuentaParcial[] Returns an array of CuentaParcial objects
