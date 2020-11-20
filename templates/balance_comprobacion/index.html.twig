@@ -19,20 +19,30 @@
                 <th>SALDO DEUDOR</th>
                 <th>SALDO ACREEDOR</th>
             </tr>
+            {% set sumaDebe = 0 %}
+            {% set sumaHaber = 0 %}
             {% for nombre in nombres %}
                 {% set counter = ( counter | default(-1) ) + 1 %}
             <tr>
                 <td>{{ counter + 1 }}</td>
                 <td>{{ nombre }}</td>
                 {% if saldos[counter][0].resta > 0 %}
+
                 <td>${{  saldos[counter][0].resta }}</td>
+                    {% set sumaDebe = saldos[counter][0].resta + sumaDebe %}
                     <td></td>
                     {% else %}
                         <td></td>
                         <td>${{  (-1)*saldos[counter][0].resta }}</td>
+                        {% set sumaHaber = saldos[counter][0].resta + sumaHaber %}
                 {% endif %}
             </tr>
             {% endfor %}
+            <tr>
+                <td colspan="2">TOTALES</td>
+                <td>${{ sumaDebe }}</td>
+                <td>${{ (-1)*sumaHaber }}</td>
+            </tr>
         </table>
     </div>
 {% endblock %}
