@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class LibroMayorController extends AbstractController
 {
     /**
-     * @Route("/libro/mayor", name="libro_mayor")
+     * @Route("/mayor", name="libro_mayor")
      */
     public function index(): Response
     {

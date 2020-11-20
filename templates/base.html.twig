@@ -6,6 +6,13 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         {% block stylesheets %}
+            <link rel="preconnect" href="https://fonts.gstatic.com">
+            <link href="https://fonts.googleapis.com/css2?family=Crimson+Text&display=swap" rel="stylesheet">
+            <style>
+                * {
+                    font-family: 'Crimson Text', serif;
+                }
+            </style>
         {% endblock %}
         
     </head>
@@ -17,9 +24,9 @@
                 </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-item nav-link active" href="#">Inicio <span class="sr-only">(current)</span></a>
                     <a class="nav-item nav-link" href="{{ path('registrar') }}">Registrar partidas</a>
-                    <a class="nav-item nav-link" href="#">Registrar cuentas</a>
+                    <a class="nav-item nav-link" href="{{ path('libro_mayor') }}">Mayorizacion</a>
+                    <a class="nav-item nav-link" href="{{ path('registrar_estado_de_resultados') }}">Registrar estado de resultados</a>
                 </div>
             </div>
         </nav>
