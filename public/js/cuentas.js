@@ -88,7 +88,7 @@ function guardar(){
 }
 
 function enviarDatos(){
-    var ruta = Routing.generate('registrarCuentas');
+    var ruta = '/registrarCuentas';
 
     console.log(ruta);
     $.ajax({

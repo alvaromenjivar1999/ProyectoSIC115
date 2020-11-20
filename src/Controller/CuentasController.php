@@ -62,7 +62,6 @@ class CuentasController extends AbstractController
         }
         else{
             throw new Exception("Error Processing Request", 1);
-            
         }
     }
     public function ultimoIdDeCuenta(){

@@ -19,6 +19,8 @@ class CuentaParcialRepository extends ServiceEntityRepository
         parent::__construct($registry, CuentaParcial::class);
     }
 
+    public function
+
     // /**
     //  * @return CuentaParcial[] Returns an array of CuentaParcial objects
     //  */
