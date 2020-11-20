@@ -4,8 +4,9 @@
 
 {% block body %}
     <div class="container" style="padding-top: 3%; padding-bottom: 3%;">
-        <h1>Libro Mayor</h1>
-        <p>Bienvenido a libro mayor</p>
+        <h5 style="text-align: center">EMPRESA "CIELO AZUL" S.A DE C.V.</h5>
+        <h5 style="text-align: center">LIBRO MAYOR</h5>
+        <h5 style="text-align: center">AL {{ "now"|date("m/d/Y") }}</h5>
 
         {% for cuenta in cuentas %}
             {% set counter = ( counter | default(-1) ) + 1 %}
@@ -48,5 +49,6 @@
 
             </table>
         {% endfor %}
+        <button id="botonImprimir" class="btn btn-dark " onclick="window.print()">Imprimir</button>
     </div>
 {% endblock %}

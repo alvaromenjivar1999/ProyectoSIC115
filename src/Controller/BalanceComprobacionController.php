@@ -24,7 +24,6 @@ class BalanceComprobacionController extends AbstractController
 
         $saldos = array();
         $nombresDeCuenta = array();
-        $total = 0.0;
 
         if (is_array($numerosDeCuenta) || is_object($numerosDeCuenta)){
             foreach ( $numerosDeCuenta as $numero ){
@@ -48,7 +47,6 @@ class BalanceComprobacionController extends AbstractController
         return $this->render('balance_comprobacion/index.html.twig', [
             'nombres' => $nombresDeCuenta,
             'saldos' => $saldos,
-            'total' => $total
         ]);
     }
 }

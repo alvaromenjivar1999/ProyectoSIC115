@@ -9,8 +9,9 @@
 </style>
 
     <div class="container" style="padding-top: 3%;">
-        <h4 style="text-align: center">EMPRESA "CIELO AZUL" S.A DE C.V.</h4>
-        <h4 style="text-align: center">BALANZA DE COMPROBACION</h4>
+        <h5 style="text-align: center">EMPRESA "CIELO AZUL" S.A DE C.V.</h5>
+        <h5 style="text-align: center">BALANZA DE COMPROBACION</h5>
+        <h5 style="text-align: center">AL {{ "now"|date("m/d/Y") }}</h5>
         <br>
         <table class="table">
             <tr>
@@ -44,5 +45,6 @@
                 <td>${{ (-1)*sumaHaber }}</td>
             </tr>
         </table>
+        <button id="botonImprimir" class="btn btn-dark" onclick="window.print()">Imprimir</button>
     </div>
 {% endblock %}
