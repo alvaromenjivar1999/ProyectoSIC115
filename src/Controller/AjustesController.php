@@ -6,12 +6,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class BalanceGeneralController extends AbstractController
+
+class AjustesController extends AbstractController
 {
     /**
-     * @Route("/balance_general", name="balance_general")
+     * @Route("/ajustes", name="ajustes")
      */
-
     public function index(): Response
     {
         $em = $this->getDoctrine()->getManager();
@@ -39,46 +39,6 @@ class BalanceGeneralController extends AbstractController
         self::ejecutarQuery("INSERT INTO public.ajustes(
         partidas_id, numero, nombre, debe, haber)
 	VALUES ($id+1, '2A7', 'IVA DÉBITO FISCAL', $debitoFiscal, 0);");
-
-        $inventario = (self::obtenerSaldoCuenta("INVENTARIOS"));
-        $ingresoPorServicio = (self::obtenerSaldoCuenta("INGRESOS POR SERVICIO"));
-        $ventaDeSoftware = (self::obtenerSaldoCuenta("VENTA DE SOFTWARE"));
-        $ventaDeAccesorios = (self::obtenerSaldoCuenta("VENTA DE ACCESORIOS CONSUMIBLES"));
-        $costosPorServicios = (-1)*(self::obtenerSaldoCuenta("COSTOS POR SERVICIOS"));
-        $compraAccesorios = (-1)*(self::obtenerSaldoCuenta("COMPRAS DE ACCESORIOS Y CONSUMIBLES"));
-        $compraSoftware = (-1)*(self::obtenerSaldoCuenta("COMPRAS DE SOFTWARE"));
-
-        $utilidadEjercicio = ($ingresoPorServicio+$ventaDeAccesorios+$ventaDeSoftware)-((-1)*$inventario+$costosPorServicios+$compraAccesorios+$compraSoftware);
-        if ($utilidadEjercicio > 0 ){
-            $utilidadEjercicio = $utilidadEjercicio * (-1);
-        }
-        $id = self::obtenerID();
-
-        self::ejecutarQuery("INSERT INTO public.ajustespartidas(id, fecha, concepto) VALUES ($id+1,'09-01-2020', 'Por determinacion de Utilidad del Ejercicio');");
-        self::ejecutarQuery("INSERT INTO public.ajustes(
-	partidas_id, numero, nombre, debe, haber)
-	VALUES ($id+1, '1A6', 'INVENTARIOS', 0, $inventario);");
-        self::ejecutarQuery("INSERT INTO public.ajustes(
-        partidas_id, numero, nombre, debe, haber)
-	VALUES ($id+1, '5A1', 'INGRESOS POR SERVICIO', 0, $ingresoPorServicio);");
-        self::ejecutarQuery("INSERT INTO public.ajustes(
-        partidas_id, numero, nombre, debe, haber)
-	VALUES ($id+1, '5A3', 'VENTA DE SOFTWARE', 0, $ventaDeSoftware);");
-        self::ejecutarQuery("INSERT INTO public.ajustes(
-        partidas_id, numero, nombre, debe, haber)
-	VALUES ($id+1, '5A2', 'VENTA DE ACCESORIOS CONSUMIBLES', 0, $ventaDeAccesorios);");
-        self::ejecutarQuery("INSERT INTO public.ajustes(
-        partidas_id, numero, nombre, debe, haber)
-	VALUES ($id+1, '4A1', 'COSTOS POR SERVICIOS', $costosPorServicios, 0);");
-        self::ejecutarQuery("INSERT INTO public.ajustes(
-        partidas_id, numero, nombre, debe, haber)
-	VALUES ($id+1, '4A2', 'COMPRAS DE ACCESORIOS Y CONSUMIBLES', $compraAccesorios, 0);");
-        self::ejecutarQuery("INSERT INTO public.ajustes(
-        partidas_id, numero, nombre, debe, haber)
-	VALUES ($id+1, '4A3', 'COMPRAS DE SOFTWARE', $compraSoftware, 0);");
-        self::ejecutarQuery("INSERT INTO public.ajustes(
-        partidas_id, numero, nombre, debe, haber)
-	VALUES ($id+1, '3A1', 'CAPITAL', 0, $utilidadEjercicio);");
 
         $query = "SELECT DISTINCT nombre from ajustes";
         $stmt = $db->prepare($query);
@@ -108,8 +68,7 @@ class BalanceGeneralController extends AbstractController
             }
         }
 
-        return $this->render('balance_general/index.html.twig', [
-            'variable' => ($ventaDeSoftware)-($costosPorServicios),
+        return $this->render('ajustes/index.html.twig', [
             'nombres' => $nombresDeCuenta,
             'saldos' => $saldos,
         ]);
@@ -146,5 +105,4 @@ class BalanceGeneralController extends AbstractController
         return doubleval($valor[0]["saldo"]);
 
     }
-
 }

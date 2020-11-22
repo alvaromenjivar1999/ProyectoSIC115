@@ -41,8 +41,8 @@ function agregarFila(){
     row.insertCell(5).innerHTML='<button onclick="editar(event)" type="button" class="btn btn-danger">Editar</button>';
     row.insertCell(6).innerHTML='<button onclick="eliminar(event)" type="button" class="btn btn-danger mr-1">Eliminar</button>';
     numeroYNombreDeCuenta.innerHTML = inputsInnerHTML;
-    debe.innerHTML='<input  class="form-control"  type="text" value="0">';    
-    haber.innerHTML='<input  class="form-control"  type="text" value="0">';
+    debe.innerHTML='$<input  class="form-control"  type="text" value="0">';
+    haber.innerHTML='$<input  class="form-control"  type="text" value="0">';
     
 }
 function aceptarCuenta(event){
