@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 class InsumosController extends AbstractController
 {
     /**
-     * @Route("/costes", name="insumos")
+     * @Route("/costes", name="costes")
      */
     public function index(): Response
     {      
