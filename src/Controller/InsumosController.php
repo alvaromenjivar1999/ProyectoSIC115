@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 class InsumosController extends AbstractController
 {
     /**
-     * @Route("/costes", name="insumos")
+     * @Route("/costes", name="costes")
      */
     public function index(): Response
     {      
@@ -37,6 +37,33 @@ class InsumosController extends AbstractController
        else{
 
        }
+    }
+
+     /**
+     * @Route("/guardarCostes", options = { "expose" = true }, name="guardarCostes")
+     */
+    public function guardarCostes(Request $request)
+    {
+        if($request->isXmlHttpRequest()){
+           
+    //estos son los costos por cada tabla, en costos.js linea 176 a 190 esta definida la estructura de este array JSON
+            $costos= $request->request->get('costos'); 
+    /*--------------------------------------------------------------------------------------------------------------*/        
+            $conn = $this->getDoctrine()->getManager();
+            $sql = 'SELECT * FROM insumos';
+
+
+
+            $stmt = $conn->getConnection()->prepare($sql);
+            $stmt->execute();
+           
+          $message= "ok";
+        }
+        else{
+            $message = "error";
+        }
+        return new JsonResponse(['status' =>$message]); //para saber si se guardo con exito o no
+        
     }
     
 }

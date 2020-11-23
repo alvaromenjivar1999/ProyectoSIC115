@@ -1,6 +1,25 @@
 var insumos=[];
 var inputsInsumosInnerHTML ="";
 var agregarFlag = false;
+var datosTotales = [];
+var MateriaPrima ={
+    "lineasDeMateriaPrima" : [],
+    "costoTotal" : ""
+};
+var manoDeObra={
+    "lineaDeManoDeObra" : [],
+    "costoTotal":""
+};
+var costosIndirectos ={
+    'lineasDeCostoIndirecto' : [],
+    'costoTotal' : ""
+};
+
+var Costos = {
+    'costosMateriaPrima' :{},
+    'manoDeObra': {},
+    'costosIndirectos': {}
+};
 function traer_insumos(){
     var ruta ="/obtenerInsumos"
     $.ajax({
@@ -91,8 +110,9 @@ function agregarFilaMO(id){
 function actualizarCostoMO(event,flag){
     console.log("esta cambaibdo")
     let padreTR =event.currentTarget.parentElement.parentElement;
-    var Horas = padreTR.children[2].firstElementChild.value;  
-    var costoPorHora = padreTR.children[3].firstElementChild.value;   
+    var Horas = parseInt(padreTR.children[2].firstElementChild.value); 
+   
+    var costoPorHora = parseInt(padreTR.children[3].firstElementChild.value);   
     var coste = costoPorHora * Horas;
     console.log(coste)
     let costoInput = padreTR.children[4].firstElementChild;
@@ -106,6 +126,7 @@ function actualizarCostoMO(event,flag){
     eliminar(event);
     }
     var newCosteTotal = parseInt(CosteTotal.innerHTML) -parseInt(costoActualEnInput) + coste;
+    
     CosteTotal.innerHTML= newCosteTotal;
 
     
@@ -148,4 +169,110 @@ function actualizarCostoCI(event,flag){
 function eliminar(event){
     let  tr = event.currentTarget.parentElement.parentElement;
     tr.parentElement.parentElement.tBodies[0].deleteRow(tr.rowIndex-2);    
+}
+
+
+function guardar(){
+    /* Json Arrays
+    MateriaPrima={
+        "lineasDeMateriaPrima" : [{"fecha": fecha , "tipoYCosto": tipoycosto , "cantidad" :cantidad ,"costo":costo}],
+        "costoTotal": costoTotal
+    };
+
+    tipoYCosto es otro json [{"nombre" :nombre , "costo":costo , "id": id}]
+    
+    manoDeObra ={
+        'lineasDeManoDeObra' : [{"fecha" : fecha , "horas" : horas , "costePorHora" : costeHora , "costo" : costo}],
+        'costoTotal" : costoTotal
+    };
+
+    costosIndirectos = {
+        'lineasDeCostoIndirecto' : [{}],
+        'costoTotal' : ""
+    };
+
+    --------------------------*/ 
+    let tablas = document.querySelectorAll("table"); //las 3 tablas
+    let tablaMP =tablas[0];
+    let trsMP = tablaMP.querySelectorAll('tbody')[0].querySelectorAll('tr');
+    trsMP.forEach(tr => {
+        var fecha= tr.children[0].firstElementChild.value
+        var tipoYCosto = insumos['insumos'][tr.children[1].firstElementChild.selectedIndex];
+        var cantidad = tr.children[2].firstElementChild.value;
+        var costo = tr.children[3].firstElementChild.value
+        MateriaPrima['lineasDeMateriaPrima'].push({
+            "fecha" :fecha,
+            "tipoyCosto" : tipoYCosto,
+            "cantidad" :cantidad,
+            "costo":costo
+        });
+
+    });
+    var costoTotalMP = tablaMP.querySelectorAll('tbody')[1].querySelectorAll('tr')[0].children[1].innerText;
+    MateriaPrima['costoTotal'] = costoTotalMP;
+
+    /* ---------------------------------------------*/
+    let tablaMO = tablas[1];
+    console.log(tablaMO)
+    let trsMO =  tablaMO.querySelectorAll('tbody')[0].querySelectorAll('tr');
+    trsMO.forEach(tr => {
+        var fecha = tr.children[0].firstElementChild.value;
+        var descripcion = tr.children[1].firstElementChild.value;
+        var horas = tr.children[2].firstElementChild.value;
+        var costePorHoras = tr.children[3].firstElementChild.value;
+        var costo = tr.children[4].firstElementChild.value;
+
+        manoDeObra['lineaDeManoDeObra'].push({
+            "fecha":fecha,
+            "descripcion":descripcion,
+            "horas":horas,
+            "costePorHoras" :costePorHoras,
+            "costo" :costo
+        });
+    });
+    var costoTotalMO = tablaMO.querySelectorAll('tbody')[1].querySelectorAll('tr')[0].children[1].innerText;
+    manoDeObra["costoTotal"] = costoTotalMO;
+
+    let tablaCI = tablas[2];
+    let trsCI = tablaCI.querySelectorAll('tbody')[0].querySelectorAll('tr');
+    trsCI.forEach(tr => {
+        var fecha = tr.children[0].firstElementChild.value;
+        var tasa = tr.children[1].firstElementChild.value;
+        var ValReal = tr.children[2].firstElementChild.value;
+        var costoAplicado = tr.children[3].firstElementChild.value;
+        
+        costosIndirectos['lineasDeCostoIndirecto'].push({
+            'fecha' : fecha,
+            'tasa':tasa,
+            "ValReal" : ValReal,
+            "costoAplicado" : costoAplicado
+        });
+    });
+
+    //enviarDatos();
+    var costoTotalCI = tablaCI.querySelectorAll('tbody')[1].querySelectorAll('tr')[0].children[1].innerText;
+    costosIndirectos["costoTotal"] = costoTotalCI;
+
+    Costos['costosMateriaPrima'] = MateriaPrima;
+    Costos['manoDeObra'] = manoDeObra;
+    Costos['costosIndirectos'] = costosIndirectos;
+    
+    console.log(Costos); //el array total de todas las tablas
+}
+
+function enviarDatos(){
+    var ruta = '/guardarCostes';
+
+    console.log(ruta);
+    $.ajax({
+        type: "POST",
+        url: ruta,
+        data: {'costos':Costos},
+        async: true,
+        dataType: "json",
+        success: function(data){
+            console.log(data['status'])
+        }
+    });
+    
 }
