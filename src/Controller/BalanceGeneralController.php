@@ -41,14 +41,14 @@ class BalanceGeneralController extends AbstractController
 	VALUES ($id+1, '2A7', 'IVA DÉBITO FISCAL', $debitoFiscal, 0);");
 
         $inventario = (self::obtenerSaldoCuenta("INVENTARIOS"));
-        $ingresoPorServicio = (self::obtenerSaldoCuenta("INGRESOS POR SERVICIO"));
-        $ventaDeSoftware = (self::obtenerSaldoCuenta("VENTA DE SOFTWARE"));
-        $ventaDeAccesorios = (self::obtenerSaldoCuenta("VENTA DE ACCESORIOS CONSUMIBLES"));
-        $costosPorServicios = (-1)*(self::obtenerSaldoCuenta("COSTOS POR SERVICIOS"));
-        $compraAccesorios = (-1)*(self::obtenerSaldoCuenta("COMPRAS DE ACCESORIOS Y CONSUMIBLES"));
-        $compraSoftware = (-1)*(self::obtenerSaldoCuenta("COMPRAS DE SOFTWARE"));
+        $ingresoPorServicio = (-1)*(self::obtenerSaldoCuenta("INGRESOS POR SERVICIOS"));
+        $ventaDeSoftware = (-1)*(self::obtenerSaldoCuenta("VENTA DE SOFTWARE"));
+        $ventaDeAccesorios = (-1)*(self::obtenerSaldoCuenta("VENTA DE ACCESORIOS CONSUMIBLES"));
+        $costosPorServicios = (self::obtenerSaldoCuenta("COSTOS POR SERVICIOS"));
+        $compraAccesorios = (self::obtenerSaldoCuenta("COMPRAS DE ACCESORIOS Y CONSUMIBLES"));
+        $compraSoftware = (self::obtenerSaldoCuenta("COMPRAS DE SOFTWARE"));
 
-        $utilidadEjercicio = ($ingresoPorServicio+$ventaDeAccesorios+$ventaDeSoftware)-((-1)*$inventario+$costosPorServicios+$compraAccesorios+$compraSoftware);
+        $utilidadEjercicio = ($ingresoPorServicio+$ventaDeAccesorios+$ventaDeSoftware)-($inventario+$costosPorServicios+$compraAccesorios+$compraSoftware);
         if ($utilidadEjercicio > 0 ){
             $utilidadEjercicio = $utilidadEjercicio * (-1);
         }
@@ -60,22 +60,22 @@ class BalanceGeneralController extends AbstractController
 	VALUES ($id+1, '1A6', 'INVENTARIOS', 0, $inventario);");
         self::ejecutarQuery("INSERT INTO public.ajustes(
         partidas_id, numero, nombre, debe, haber)
-	VALUES ($id+1, '5A1', 'INGRESOS POR SERVICIO', 0, $ingresoPorServicio);");
+	VALUES ($id+1, '5A1', 'INGRESOS POR SERVICIOS', $ingresoPorServicio,0);");
         self::ejecutarQuery("INSERT INTO public.ajustes(
         partidas_id, numero, nombre, debe, haber)
-	VALUES ($id+1, '5A3', 'VENTA DE SOFTWARE', 0, $ventaDeSoftware);");
+	VALUES ($id+1, '5A3', 'VENTA DE SOFTWARE', $ventaDeSoftware,0);");
         self::ejecutarQuery("INSERT INTO public.ajustes(
         partidas_id, numero, nombre, debe, haber)
-	VALUES ($id+1, '5A2', 'VENTA DE ACCESORIOS CONSUMIBLES', 0, $ventaDeAccesorios);");
+	VALUES ($id+1, '5A2', 'VENTA DE ACCESORIOS CONSUMIBLES', $ventaDeAccesorios,0);");
         self::ejecutarQuery("INSERT INTO public.ajustes(
         partidas_id, numero, nombre, debe, haber)
-	VALUES ($id+1, '4A1', 'COSTOS POR SERVICIOS', $costosPorServicios, 0);");
+	VALUES ($id+1, '4A1', 'COSTOS POR SERVICIOS', 0,$costosPorServicios);");
         self::ejecutarQuery("INSERT INTO public.ajustes(
         partidas_id, numero, nombre, debe, haber)
-	VALUES ($id+1, '4A2', 'COMPRAS DE ACCESORIOS Y CONSUMIBLES', $compraAccesorios, 0);");
+	VALUES ($id+1, '4A2', 'COMPRAS DE ACCESORIOS Y CONSUMIBLES', 0, $compraAccesorios);");
         self::ejecutarQuery("INSERT INTO public.ajustes(
         partidas_id, numero, nombre, debe, haber)
-	VALUES ($id+1, '4A3', 'COMPRAS DE SOFTWARE', $compraSoftware, 0);");
+	VALUES ($id+1, '4A3', 'COMPRAS DE SOFTWARE', 0, $compraSoftware);");
         self::ejecutarQuery("INSERT INTO public.ajustes(
         partidas_id, numero, nombre, debe, haber)
 	VALUES ($id+1, '3A1', 'CAPITAL', 0, $utilidadEjercicio);");
@@ -112,6 +112,7 @@ class BalanceGeneralController extends AbstractController
             'variable' => ($ventaDeSoftware)-($costosPorServicios),
             'nombres' => $nombresDeCuenta,
             'saldos' => $saldos,
+            'ing' => $ingresoPorServicio
         ]);
     }
 

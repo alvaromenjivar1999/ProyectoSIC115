@@ -3,6 +3,7 @@
 {% block title %}Hello BalanceGeneralController!{% endblock %}
 
 {% block body %}
+    {{ ing }}
     <div class="container" style="padding-top: 3%;">
         <h5 style="text-align: center">"CIELO AZUL" S.A DE C.V.</h5>
         <h5 style="text-align: center">BALANCE GENERAL AL {{ "now"|date("m/d/Y") }}</h5>
@@ -59,7 +60,7 @@
                     <td>{{ nombre }}</td>
 
                     <td></td>
-                    <td>${{  (-1)*saldos[counter][0].resta }}</td>
+                    <td>${{  saldos[counter][0].resta }}</td>
                     </tr>
                 {% endif %}
 
